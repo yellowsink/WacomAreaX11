@@ -2,66 +2,58 @@ using System.Diagnostics;
 
 namespace XSetWacom
 {
-	[DebuggerDisplay("{Left} {Top} {Right} {Bottom}")]
-	public class TabletArea
+	[DebuggerDisplay("{Left} {Top} {Right} {Bottom}, rotate {Rotation}")]
+	public partial class TabletArea
 	{
 		private int _bottom;
-
 		private int _left;
 		private int _right;
 		private int _top;
 
-		public decimal XScaleFactor = 1;
-		public decimal YScaleFactor = 1;
+		public Rotation Rotation;
 
-		public TabletArea((int left, int top, int right, int bottom) area) : this(area.left,
-			area.top,
-			area.right,
-			area.bottom)
+		public decimal ScaleFactor = 1;
+
+		public TabletArea((int left, int top, int right, int bottom) area, Rotation rotation = Rotation.None) :
+			this(area.left, area.top, area.right, area.bottom, rotation)
 		{
 		}
 
-		public TabletArea(int left, int top, int right, int bottom, bool centimetres = false)
+		public TabletArea(int left, int top, int right, int bottom, bool centimetres = false) : this(left,
+			top,
+			right,
+			bottom,
+			Rotation.None,
+			centimetres)
 		{
+		}
+
+		public TabletArea(int left, int top, int right, int bottom, Rotation rotation, bool centimetres = false)
+		{
+			Rotation = rotation;
+			
 			if (centimetres) ScaleToCentimetres();
 
-			Left   = left;
-			Top    = top;
-			Right  = right;
-			Bottom = bottom;
-		}
-
-		public decimal Left
-		{
-			get => _left * XScaleFactor;
-			set => _left = (int) (value / XScaleFactor);
-		}
-
-		public decimal Right
-		{
-			get => _right * XScaleFactor;
-			set => _right = (int) (value / XScaleFactor);
-		}
-
-		public decimal Top
-		{
-			get => _top * YScaleFactor;
-			set => _top = (int) (value / YScaleFactor);
-		}
-
-		public decimal Bottom
-		{
-			get => _bottom * YScaleFactor;
-			set => _bottom = (int) (value / YScaleFactor);
+			Left     = left;
+			Top      = top;
+			Right    = right;
+			Bottom   = bottom;
 		}
 
 		public decimal Width  => Right  - Left;
 		public decimal Height => Bottom - Top;
 
-		public (int left, int top, int right, int bottom) Unscaled                    => (_left, _top, _right, _bottom);
-		public void                                       ScaleX(decimal scaleFactor) => XScaleFactor *= scaleFactor;
-		public void                                       ScaleY(decimal scaleFactor) => YScaleFactor *= scaleFactor;
+		public (int left, int top, int right, int bottom) Unscaled => (_left, _top, _right, _bottom);
 
-		public void ScaleToCentimetres() => XScaleFactor = YScaleFactor = 0.001m;
+		public void Scale(decimal scaleFactor) => ScaleFactor *= scaleFactor;
+
+		public void ScaleToCentimetres() => ScaleFactor = 0.001m;
+
+		public void RotateCw()  => Rotation = RotateCw(Rotation);
+		public void RotateCcw() => Rotation = RotateCcw(Rotation);
+
+		public static Rotation RotateCw(Rotation  rotation) => rotation == Rotation.Ccw ? Rotation.None : rotation + 1;
+		public static Rotation RotateCcw(Rotation rotation) => rotation == Rotation.None ? Rotation.Ccw : rotation - 1;
 	}
+
 }

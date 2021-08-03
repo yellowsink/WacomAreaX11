@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Globalization;
+using System.Text.Json;
 using XSetWacom;
 
 namespace WacomAreaX11
@@ -39,7 +41,8 @@ namespace WacomAreaX11
 			var yOffset = Math.Round(originalArea.Top,    2).NiceFormat();
 			Console.WriteLine($"Your tablet is         {fWidth}cm wide and and {fHeight}cm high");
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
-			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)\n");
+			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)");
+			Console.WriteLine($"Your current tablet rotation is: {tablet.Rotation}\n");
 
 			var newWidth   = EnterNumber("Please enter the desired new tablet area width");
 			var newHeight  = EnterNumber("Please enter the desired new tablet area height");
@@ -50,6 +53,7 @@ namespace WacomAreaX11
 										 (int) newYOffset,
 										 (int) (newXOffset + newWidth),
 										 (int) (newYOffset + newHeight),
+										 originalArea.Rotation,
 										 true);
 
 			tablet.Area = newArea;

@@ -23,15 +23,14 @@ namespace XSetWacom
 
 		public static TabletArea GetArea(int tabletId)
 		{
-			var process = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} Area")
+			var areaProcess = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} Area")
 			{
 				RedirectStandardOutput = true
 			});
-			process!.WaitForExit();
+			areaProcess!.WaitForExit();
+			var area = areaProcess.StandardOutput.ReadToEnd().Trim().Split();
 
-			var area = process.StandardOutput.ReadToEnd().Split();
-
-			return new TabletArea((int.Parse(area[0]), int.Parse(area[1]), int.Parse(area[2]), int.Parse(area[3])));
+			return new TabletArea((int.Parse(area[0]), int.Parse(area[1]), int.Parse(area[2]), int.Parse(area[3])), GetRotationOnly(tabletId));
 		}
 
 		public static TabletArea GetFullArea(int tabletId)
@@ -43,6 +42,41 @@ namespace XSetWacom
 			return fullArea;
 		}
 
+		public static Rotation GetRotationOnly(int tabletId)
+		{
+			var rotateProcess = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} Rotate")
+			{
+				RedirectStandardOutput = true
+			});
+			rotateProcess!.WaitForExit();
+			return rotateProcess.StandardOutput.ReadToEnd().Trim() switch
+			{
+				"none" => Rotation.None,
+				"cw"   => Rotation.Cw,
+				"half" => Rotation.Half,
+				"ccw"  => Rotation.Ccw,
+				_      => Rotation.None
+			};
+		}
+
+		public static void SetRotation(int tabletId, Rotation rotation)
+		{
+			var rotationStr = rotation switch
+			{
+				Rotation.None => "None",
+				Rotation.Cw   => "Cw",
+				Rotation.Half => "Half",
+				Rotation.Ccw  => "Ccw",
+				_             => "None"
+			};
+			
+			Process.Start(new ProcessStartInfo("xsetwacom",
+											   $"set {tabletId} Rotate {rotationStr}")
+			{
+				RedirectStandardOutput = true
+			}) !.WaitForExit();
+		}
+		
 		public static void SetArea(int tabletId, TabletArea area)
 			=> Process.Start(new ProcessStartInfo("xsetwacom",
 												  $"set {tabletId} Area {area.Unscaled.left} {area.Unscaled.top} {area.Unscaled.right} {area.Unscaled.bottom}")

@@ -4,13 +4,18 @@ namespace XSetWacom
 	{
 		public Tablet(int id) { Id = id; }
 
-		public Tablet() : this(TabletDriver.GetTabletId()) { }
 		public int Id { get; }
 
 		public TabletArea Area
 		{
 			get => TabletDriver.GetArea(Id);
 			set => TabletDriver.SetArea(Id, value);
+		}
+
+		public Rotation Rotation
+		{
+			get => TabletDriver.GetRotationOnly(Id);
+			set => TabletDriver.SetRotation(Id, value);
 		}
 
 		public TabletArea FullArea => TabletDriver.GetFullArea(Id);
