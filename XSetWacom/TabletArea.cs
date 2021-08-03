@@ -5,26 +5,18 @@ namespace XSetWacom
 	[DebuggerDisplay("{Left} {Top} {Right} {Bottom}, rotate {Rotation}")]
 	public partial class TabletArea
 	{
-		internal int RawBottom;
-		internal int RawLeft;
-		internal int RawRight;
-		internal int RawTop;
 
-		public Rotation Rotation;
+		internal virtual int RawBottom { get; set; }
+		internal virtual int RawLeft   { get; set; }
+		internal virtual int RawRight  { get; set; }
+		internal virtual int RawTop    { get; set; }
+
+		public virtual Rotation Rotation { get; set; }
 
 		public decimal ScaleFactor = 1;
 
 		public TabletArea((int left, int top, int right, int bottom) area, Rotation rotation = Rotation.None) :
 			this(area.left, area.top, area.right, area.bottom, rotation)
-		{
-		}
-
-		public TabletArea(int left, int top, int right, int bottom, bool centimetres = false) : this(left,
-			top,
-			right,
-			bottom,
-			Rotation.None,
-			centimetres)
 		{
 		}
 
@@ -37,8 +29,14 @@ namespace XSetWacom
 			Right  = right;
 			Bottom = bottom;
 
+			// ReSharper disable once VirtualMemberCallInConstructor
 			Rotation = rotation;
 		}
+
+		/// <summary>
+		///		PLEASE IGNORE - only to be used implicitly by the BoundTabletArea constructor
+		/// </summary>
+		internal TabletArea() { }
 
 		public decimal Width  => Right  - Left;
 		public decimal Height => Bottom - Top;

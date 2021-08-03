@@ -11,9 +11,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawLeft,
-				Rotation.Cw   => RawTop,
+				Rotation.Cw   => RawBottom,
 				Rotation.Half => RawRight,
-				Rotation.Ccw  => RawBottom,
+				Rotation.Ccw  => RawTop,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -43,9 +43,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawRight,
-				Rotation.Cw   => RawBottom,
+				Rotation.Cw   => RawTop,
 				Rotation.Half => RawLeft,
-				Rotation.Ccw  => RawTop,
+				Rotation.Ccw  => RawBottom,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -75,9 +75,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawTop,
-				Rotation.Cw   => RawLeft,
+				Rotation.Cw   => RawRight,
 				Rotation.Half => RawBottom,
-				Rotation.Ccw  => RawRight,
+				Rotation.Ccw  => RawLeft,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -107,9 +107,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawBottom,
-				Rotation.Cw   => RawRight,
+				Rotation.Cw   => RawLeft,
 				Rotation.Half => RawTop,
-				Rotation.Ccw  => RawLeft,
+				Rotation.Ccw  => RawRight,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set

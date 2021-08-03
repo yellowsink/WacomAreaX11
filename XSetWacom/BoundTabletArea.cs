@@ -1,15 +1,18 @@
+using System.Diagnostics;
+
 namespace XSetWacom
 {
 	/// <summary>
 	///     Works just like TabletArea, but it will submit changes to xsetwacom instantly
 	/// </summary>
+	[DebuggerDisplay("Bound to tablet ID {TabletId}")]
 	public class BoundTabletArea : TabletArea
 	{
-		public BoundTabletArea(int tabletId) : base(0, 0, 0, 0) { TabletId = tabletId; }
+		public BoundTabletArea(int tabletId) { TabletId = tabletId; }
 
 		public int TabletId { get; }
 
-		internal new int RawBottom
+		internal override int RawBottom
 		{
 			get => TabletDriver.GetArea(TabletId).RawBottom;
 			set
@@ -20,9 +23,9 @@ namespace XSetWacom
 			}
 		}
 
-		internal new int RawLeft
+		internal override int RawLeft
 		{
-			get => TabletDriver.GetArea(TabletId).RawBottom;
+			get => TabletDriver.GetArea(TabletId).RawLeft;
 			set
 			{
 				var area = TabletDriver.GetArea(TabletId);
@@ -31,9 +34,9 @@ namespace XSetWacom
 			}
 		}
 
-		internal new int RawRight
+		internal override int RawRight
 		{
-			get => TabletDriver.GetArea(TabletId).RawBottom;
+			get => TabletDriver.GetArea(TabletId).RawRight;
 			set
 			{
 				var area = TabletDriver.GetArea(TabletId);
@@ -42,9 +45,9 @@ namespace XSetWacom
 			}
 		}
 
-		internal new int RawTop
+		internal override int RawTop
 		{
-			get => TabletDriver.GetArea(TabletId).RawBottom;
+			get => TabletDriver.GetArea(TabletId).RawTop;
 			set
 			{
 				var area = TabletDriver.GetArea(TabletId);
@@ -53,7 +56,7 @@ namespace XSetWacom
 			}
 		}
 
-		public new Rotation Rotation
+		public override Rotation Rotation
 		{
 			get => TabletDriver.GetRotation(TabletId);
 			set => TabletDriver.SetRotation(TabletId, value);

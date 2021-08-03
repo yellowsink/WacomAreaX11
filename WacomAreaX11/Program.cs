@@ -28,15 +28,15 @@ namespace WacomAreaX11
 			// get area and scale the coordinates to centimetres
 			var fullArea = tablet.FullArea;
 			fullArea.ScaleToCentimetres();
-			var originalArea = tablet.Area;
-			originalArea.ScaleToCentimetres();
+			var area = tablet.BoundArea;
+			area.ScaleToCentimetres();
 
 			var fWidth  = Math.Round(fullArea.Width,      2).NiceFormat();
 			var fHeight = Math.Round(fullArea.Height,     2).NiceFormat();
-			var cWidth  = Math.Round(originalArea.Width,  2).NiceFormat();
-			var cHeight = Math.Round(originalArea.Height, 2).NiceFormat();
-			var xOffset = Math.Round(originalArea.Left,   2).NiceFormat();
-			var yOffset = Math.Round(originalArea.Top,    2).NiceFormat();
+			var cWidth  = Math.Round(area.Width,  2).NiceFormat();
+			var cHeight = Math.Round(area.Height, 2).NiceFormat();
+			var xOffset = Math.Round(area.Left,   2).NiceFormat();
+			var yOffset = Math.Round(area.Top,    2).NiceFormat();
 			Console.WriteLine($"Your tablet is         {fWidth}cm wide and and {fHeight}cm high");
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
 			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)");
@@ -47,14 +47,10 @@ namespace WacomAreaX11
 			var newXOffset = EnterNumber("Please enter the desired new tablet area left offset");
 			var newYOffset = EnterNumber("Please enter the desired new tablet area top offset");
 
-			var newArea = new TabletArea((int) newXOffset,
-										 (int) newYOffset,
-										 (int) (newXOffset + newWidth),
-										 (int) (newYOffset + newHeight),
-										 originalArea.Rotation,
-										 true);
-
-			tablet.Area = newArea;
+			area.Left   = newXOffset;
+			area.Top    = newYOffset;
+			area.Right  = newXOffset + newWidth;
+			area.Bottom = newYOffset + newHeight;
 
 			Console.WriteLine("Your area has been set!!!");
 		}
