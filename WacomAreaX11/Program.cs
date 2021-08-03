@@ -4,14 +4,13 @@ using XSetWacom;
 
 namespace WacomAreaX11
 {
-	class Program
+	internal class Program
 	{
 		private static void Main()
 		{
 			Console.WriteLine("Wacom area set helper for Linux (xf86 driver)\n"
-							+ "Because Wacom coordinates are confusing!\n" 
-							+ "By Cain Atkinson\n");
-			
+							+ "Because Wacom coordinates are confusing!\n" + "By Cain Atkinson\n");
+
 			// We require xsetwacom to work, so throw an error if not available
 			if (!TabletDriver.IsDriverAccessible())
 			{
@@ -27,7 +26,7 @@ namespace WacomAreaX11
 			var tablet = TabletDriver.GetTablet();
 
 			// get area and scale the coordinates to centimetres
-			var fullArea     = tablet.FullArea;
+			var fullArea = tablet.FullArea;
 			fullArea.ScaleToCentimetres();
 			var originalArea = tablet.Area;
 			originalArea.ScaleToCentimetres();
@@ -42,9 +41,9 @@ namespace WacomAreaX11
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
 			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)\n");
 
-			var newWidth  = EnterNumber("Please enter the desired new tablet area width");
-			var newHeight = EnterNumber("Please enter the desired new tablet area height");
-			var newXOffset  = EnterNumber("Please enter the desired new tablet area left offset");
+			var newWidth   = EnterNumber("Please enter the desired new tablet area width");
+			var newHeight  = EnterNumber("Please enter the desired new tablet area height");
+			var newXOffset = EnterNumber("Please enter the desired new tablet area left offset");
 			var newYOffset = EnterNumber("Please enter the desired new tablet area top offset");
 
 			var newArea = new TabletArea((int) newXOffset,
@@ -54,18 +53,18 @@ namespace WacomAreaX11
 										 true);
 
 			tablet.Area = newArea;
-			
+
 			Console.WriteLine("Your area has been set!!!");
 		}
-		
+
 		private static decimal EnterNumber(string message)
 		{
 			while (true)
 			{
 				Console.Write(message + "\n>> ");
-			
+
 				if (decimal.TryParse(Console.ReadLine(), out var num)) return num;
-			
+
 				Console.CursorTop -= 1;
 				Console.Write("\u001b[2K");
 				Console.CursorTop -= message.Split('\n').Length;

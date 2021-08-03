@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\XSetWacom\XSetWacom.csproj" />
+        <ProjectReference Include="..\XSetWacom\XSetWacom.csproj"/>
     </ItemGroup>
 
 </Project>

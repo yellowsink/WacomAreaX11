@@ -9,11 +9,12 @@ namespace XSetWacom
 	{
 		public static bool IsDriverAccessible()
 		{
-			try { 
+			try
+			{
 				Process.Start(new ProcessStartInfo("xsetwacom", "--version")
 				{
 					RedirectStandardOutput = true
-				}); 
+				});
 			}
 			catch (Exception) { return false; } // if anything about this fails we wont be able to use xsetwacom
 
@@ -41,7 +42,7 @@ namespace XSetWacom
 			SetArea(tabletId, currentArea);
 			return fullArea;
 		}
-		
+
 		public static void SetArea(int tabletId, TabletArea area)
 			=> Process.Start(new ProcessStartInfo("xsetwacom",
 												  $"set {tabletId} Area {area.Unscaled.left} {area.Unscaled.top} {area.Unscaled.right} {area.Unscaled.bottom}")

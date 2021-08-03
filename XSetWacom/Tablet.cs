@@ -2,11 +2,10 @@ namespace XSetWacom
 {
 	public class Tablet
 	{
-		public int Id { get; }
-
 		public Tablet(int id) { Id = id; }
 
 		public Tablet() : this(TabletDriver.GetTabletId()) { }
+		public int Id { get; }
 
 		public TabletArea Area
 		{
