@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
 using System.Globalization;
-using System.Text.Json;
 using XSetWacom;
 
 namespace WacomAreaX11

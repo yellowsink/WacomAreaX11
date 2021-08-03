@@ -5,10 +5,10 @@ namespace XSetWacom
 	[DebuggerDisplay("{Left} {Top} {Right} {Bottom}, rotate {Rotation}")]
 	public partial class TabletArea
 	{
-		private int _bottom;
-		private int _left;
-		private int _right;
-		private int _top;
+		internal int RawBottom;
+		internal int RawLeft;
+		internal int RawRight;
+		internal int RawTop;
 
 		public Rotation Rotation;
 
@@ -30,20 +30,20 @@ namespace XSetWacom
 
 		public TabletArea(int left, int top, int right, int bottom, Rotation rotation, bool centimetres = false)
 		{
-			Rotation = rotation;
-			
 			if (centimetres) ScaleToCentimetres();
 
-			Left     = left;
-			Top      = top;
-			Right    = right;
-			Bottom   = bottom;
+			Left   = left;
+			Top    = top;
+			Right  = right;
+			Bottom = bottom;
+
+			Rotation = rotation;
 		}
 
 		public decimal Width  => Right  - Left;
 		public decimal Height => Bottom - Top;
 
-		public (int left, int top, int right, int bottom) Unscaled => (_left, _top, _right, _bottom);
+		public (int left, int top, int right, int bottom) Unscaled => (RawLeft, RawTop, RawRight, RawBottom);
 
 		public void Scale(decimal scaleFactor) => ScaleFactor *= scaleFactor;
 
@@ -55,5 +55,4 @@ namespace XSetWacom
 		public static Rotation RotateCw(Rotation  rotation) => rotation == Rotation.Ccw ? Rotation.None : rotation + 1;
 		public static Rotation RotateCcw(Rotation rotation) => rotation == Rotation.None ? Rotation.Ccw : rotation - 1;
 	}
-
 }

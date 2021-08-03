@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace XSetWacom
 {
@@ -28,9 +29,10 @@ namespace XSetWacom
 				RedirectStandardOutput = true
 			});
 			areaProcess!.WaitForExit();
-			var area = areaProcess.StandardOutput.ReadToEnd().Trim().Split();
+			var area    = areaProcess.StandardOutput.ReadToEnd().Trim().Split();
+			var intArea = area.Select(str => int.Parse(str)).ToArray();
 
-			return new TabletArea((int.Parse(area[0]), int.Parse(area[1]), int.Parse(area[2]), int.Parse(area[3])), GetRotationOnly(tabletId));
+			return new TabletArea((intArea[0], intArea[1], intArea[2], intArea[3]), GetRotation(tabletId));
 		}
 
 		public static TabletArea GetFullArea(int tabletId)
@@ -42,14 +44,15 @@ namespace XSetWacom
 			return fullArea;
 		}
 
-		public static Rotation GetRotationOnly(int tabletId)
+		public static Rotation GetRotation(int tabletId)
 		{
 			var rotateProcess = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} Rotate")
 			{
 				RedirectStandardOutput = true
 			});
 			rotateProcess!.WaitForExit();
-			return rotateProcess.StandardOutput.ReadToEnd().Trim() switch
+			var rotation = rotateProcess!.StandardOutput.ReadToEnd().Trim();
+			return rotation switch
 			{
 				"none" => Rotation.None,
 				"cw"   => Rotation.Cw,
@@ -69,14 +72,13 @@ namespace XSetWacom
 				Rotation.Ccw  => "Ccw",
 				_             => "None"
 			};
-			
-			Process.Start(new ProcessStartInfo("xsetwacom",
-											   $"set {tabletId} Rotate {rotationStr}")
+
+			Process.Start(new ProcessStartInfo("xsetwacom", $"set {tabletId} Rotate {rotationStr}")
 			{
 				RedirectStandardOutput = true
 			}) !.WaitForExit();
 		}
-		
+
 		public static void SetArea(int tabletId, TabletArea area)
 			=> Process.Start(new ProcessStartInfo("xsetwacom",
 												  $"set {tabletId} Area {area.Unscaled.left} {area.Unscaled.top} {area.Unscaled.right} {area.Unscaled.bottom}")

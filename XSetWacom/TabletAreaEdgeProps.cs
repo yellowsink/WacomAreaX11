@@ -10,10 +10,10 @@ namespace XSetWacom
 		{
 			get => Rotation switch
 			{
-				Rotation.None => _left,
-				Rotation.Cw   => _top,
-				Rotation.Half => _right,
-				Rotation.Ccw  => _bottom,
+				Rotation.None => RawLeft,
+				Rotation.Cw   => RawTop,
+				Rotation.Half => RawRight,
+				Rotation.Ccw  => RawBottom,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -21,16 +21,16 @@ namespace XSetWacom
 				switch (Rotation)
 				{
 					case Rotation.None:
-						_left = (int) (value / ScaleFactor);
+						RawLeft = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						_top = (int) (value / ScaleFactor);
+						RawTop = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						_right = (int) (value / ScaleFactor);
+						RawRight = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						_bottom = (int) (value / ScaleFactor);
+						RawBottom = (int) (value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -42,10 +42,10 @@ namespace XSetWacom
 		{
 			get => Rotation switch
 			{
-				Rotation.None => _right,
-				Rotation.Cw   => _bottom,
-				Rotation.Half => _left,
-				Rotation.Ccw  => _top,
+				Rotation.None => RawRight,
+				Rotation.Cw   => RawBottom,
+				Rotation.Half => RawLeft,
+				Rotation.Ccw  => RawTop,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -53,16 +53,16 @@ namespace XSetWacom
 				switch (Rotation)
 				{
 					case Rotation.None:
-						_right = (int) (value / ScaleFactor);
+						RawRight = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						_bottom = (int) (value / ScaleFactor);
+						RawBottom = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						_left = (int) (value / ScaleFactor);
+						RawLeft = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						_top = (int) (value / ScaleFactor);
+						RawTop = (int) (value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -74,10 +74,10 @@ namespace XSetWacom
 		{
 			get => Rotation switch
 			{
-				Rotation.None => _top,
-				Rotation.Cw   => _left,
-				Rotation.Half => _bottom,
-				Rotation.Ccw  => _right,
+				Rotation.None => RawTop,
+				Rotation.Cw   => RawLeft,
+				Rotation.Half => RawBottom,
+				Rotation.Ccw  => RawRight,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -85,16 +85,16 @@ namespace XSetWacom
 				switch (Rotation)
 				{
 					case Rotation.None:
-						_top = (int) (value / ScaleFactor);
+						RawTop = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						_left = (int) (value / ScaleFactor);
+						RawLeft = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						_bottom = (int) (value / ScaleFactor);
+						RawBottom = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						_right = (int) (value / ScaleFactor);
+						RawRight = (int) (value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -106,10 +106,10 @@ namespace XSetWacom
 		{
 			get => Rotation switch
 			{
-				Rotation.None => _bottom,
-				Rotation.Cw   => _right,
-				Rotation.Half => _top,
-				Rotation.Ccw  => _left,
+				Rotation.None => RawBottom,
+				Rotation.Cw   => RawRight,
+				Rotation.Half => RawTop,
+				Rotation.Ccw  => RawLeft,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -117,16 +117,16 @@ namespace XSetWacom
 				switch (Rotation)
 				{
 					case Rotation.None:
-						_bottom = (int) (value / ScaleFactor);
+						RawBottom = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						_right = (int) (value / ScaleFactor);
+						RawRight = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						_top = (int) (value / ScaleFactor);
+						RawTop = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						_left = (int) (value / ScaleFactor);
+						RawLeft = (int) (value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
