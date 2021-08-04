@@ -14,7 +14,7 @@ namespace XSetWacom
 		{
 		}
 		
-		public FullArea(int bottom, int left, int right, int top)
+		public FullArea(int left, int top, int right, int bottom)
 		{
 			_rawBottom = bottom;
 			_rawLeft   = left;
