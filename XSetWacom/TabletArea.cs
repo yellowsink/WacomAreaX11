@@ -20,7 +20,7 @@ namespace XSetWacom
 		{
 		}
 
-		public TabletArea(int left, int top, int right, int bottom, FullArea fullArea, Rotation rotation, bool centimetres = false)
+		public TabletArea(decimal left, decimal top, decimal right, decimal bottom, FullArea fullArea, Rotation rotation, bool centimetres = false)
 		{
 			if (centimetres) ScaleToCentimetres();
 

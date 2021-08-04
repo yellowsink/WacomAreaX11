@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Globalization;
 using XSetWacom;
 
 namespace WacomAreaX11
 {
-	internal class Program
+	internal static class Program
 	{
 		private static void Main()
 		{
-			Console.WriteLine("Wacom area set helper for Linux (xf86 driver)\n"
-							+ "Because Wacom coordinates are confusing!\n" + "By Cain Atkinson\n");
+			Console.WriteLine(@"Wacom area set helper for Linux (xf86 driver)
+Because Wacom coordinates are confusing!
+By Cain Atkinson
+");
 
 			// We require xsetwacom to work, so throw an error if not available
 			if (!TabletDriver.IsDriverAccessible())
@@ -22,15 +23,59 @@ namespace WacomAreaX11
 				Environment.Exit(0);
 			}
 
-			// do this first in case it fails
+			
+			var (fullArea, area) = PrepareAreas();
+			PrintTabletInfo(area, fullArea);
+			
+			var (newRotation, newWidth, newHeight, newXOffset, newYOffset) = AskForNewArea(area, fullArea);
+
+			area.Rotation = newRotation; // set this first!!!
+			area.Left     = newXOffset;
+			area.Top      = newYOffset;
+			area.Right    = newXOffset + newWidth;
+			area.Bottom   = newYOffset + newHeight;
+			
+			Console.WriteLine("Your area has been set!!!");
+		}
+
+		private static (Rotation newRotation, decimal newWidth, decimal newHeight, decimal newXOffset, decimal newYOffset)
+			AskForNewArea(TabletArea area, FullArea fullArea)
+		{
+			var newRotation = InputHelper.PickFromList("Do you want to change your tablet's rotation?",
+													   new[] { Rotation.None, Rotation.Cw, Rotation.Half, Rotation.Ccw },
+													   area.Rotation);
+
+			var newWidth  = InputHelper.EnterNumber("Please enter the desired new tablet area width");
+			var newHeight = InputHelper.EnterNumber("Please enter the desired new tablet area height");
+
+			var centerX = InputHelper.YesNo("Do you want to center your area horizontally?", true);
+			var centerY = InputHelper.YesNo("Do you want to center your area vertically?",   true);
+
+			var (centeredX, centeredY) = GetCenteredOffset(new TabletArea(0, 0, newWidth, newHeight, fullArea, newRotation, true), fullArea);
+
+			var newXOffset = centerX
+								 ? centeredX
+								 : InputHelper.EnterNumber("Please enter the desired new tablet area left offset");
+			var newYOffset = centerY
+								 ? centeredY
+								 : InputHelper.EnterNumber("Please enter the desired new tablet area top offset");
+			return (newRotation, newWidth, newHeight, newXOffset, newYOffset);
+		}
+
+		private static (FullArea fullArea, BoundTabletArea area) PrepareAreas()
+		{ // do this first in case it fails
 			var tablet = TabletDriver.GetTablet();
 
 			// get area and scale the coordinates to centimetres
 			var fullArea = tablet.FullArea;
 			fullArea.ScaleToCentimetres();
-			var area = tablet.BoundArea;
+			var area = tablet.BoundArea; // this is inefficient - it causes a xsetwacom call for EVERY get and set
 			area.ScaleToCentimetres();
+			return (fullArea, area);
+		}
 
+		private static void PrintTabletInfo(TabletArea area, FullArea fullArea)
+		{
 			var fWidth  = Math.Round(fullArea.Width,  2).NiceFormat();
 			var fHeight = Math.Round(fullArea.Height, 2).NiceFormat();
 			var cWidth  = Math.Round(area.Width,      2).NiceFormat();
@@ -40,39 +85,15 @@ namespace WacomAreaX11
 			Console.WriteLine($"Your tablet is         {fWidth}cm wide and and {fHeight}cm high");
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
 			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)");
-			Console.WriteLine($"Your current tablet rotation is: {tablet.Rotation}\n");
-
-			var newWidth   = EnterNumber("Please enter the desired new tablet area width");
-			var newHeight  = EnterNumber("Please enter the desired new tablet area height");
-			var newXOffset = EnterNumber("Please enter the desired new tablet area left offset");
-			var newYOffset = EnterNumber("Please enter the desired new tablet area top offset");
-
-			area.Left   = newXOffset;
-			area.Top    = newYOffset;
-			area.Right  = newXOffset + newWidth;
-			area.Bottom = newYOffset + newHeight;
-
-			Console.WriteLine("Your area has been set!!!");
+			Console.WriteLine($"Your current tablet rotation is: {area.Rotation}\n");
 		}
 
-		private static decimal EnterNumber(string message)
+		private static (decimal x, decimal y) GetCenteredOffset(TabletArea area, FullArea fullArea)
 		{
-			while (true)
-			{
-				Console.Write(message + "\n>> ");
+			var fullAreaRotated = new TabletArea(fullArea.Unscaled, fullArea, area.Rotation);
+			fullAreaRotated.ScaleToCentimetres();
 
-				if (decimal.TryParse(Console.ReadLine(), out var num)) return num;
-
-				Console.CursorTop -= 1;
-				Console.Write("\u001b[2K");
-				Console.CursorTop -= message.Split('\n').Length;
-				Console.Write("Not a number - ");
-			}
+			return (fullAreaRotated.Width / 2 - area.Width / 2, fullAreaRotated.Height / 2 - area.Height / 2);
 		}
-	}
-
-	public static class Ext
-	{
-		public static string NiceFormat(this decimal n) => n.ToString(CultureInfo.CurrentCulture).PadLeft(5);
 	}
 }

@@ -5,10 +5,10 @@ namespace XSetWacom
 	/// </summary>
 	public class FullArea
 	{
-		private int _rawBottom;
-		private int _rawLeft;
-		private int _rawRight;
-		private int _rawTop;
+		private readonly int _rawBottom;
+		private readonly int _rawLeft;
+		private readonly int _rawRight;
+		private readonly int _rawTop;
 
 		public FullArea((int, int, int, int) area) : this(area.Item1, area.Item2, area.Item3, area.Item4)
 		{
@@ -32,5 +32,10 @@ namespace XSetWacom
 
 		public decimal Width  => Right  - Left;
 		public decimal Height => Bottom - Top;
+
+		internal int RawWidth  => _rawRight  - _rawLeft;
+		internal int RawHeight => _rawBottom - _rawTop;
+
+		public (int, int, int, int) Unscaled => (_rawLeft, _rawTop, _rawRight, _rawBottom);
 	}
 }
