@@ -31,12 +31,12 @@ namespace WacomAreaX11
 			var area = tablet.BoundArea;
 			area.ScaleToCentimetres();
 
-			var fWidth  = Math.Round(fullArea.Width,      2).NiceFormat();
-			var fHeight = Math.Round(fullArea.Height,     2).NiceFormat();
-			var cWidth  = Math.Round(area.Width,  2).NiceFormat();
-			var cHeight = Math.Round(area.Height, 2).NiceFormat();
-			var xOffset = Math.Round(area.Left,   2).NiceFormat();
-			var yOffset = Math.Round(area.Top,    2).NiceFormat();
+			var fWidth  = Math.Round(fullArea.Width,  2).NiceFormat();
+			var fHeight = Math.Round(fullArea.Height, 2).NiceFormat();
+			var cWidth  = Math.Round(area.Width,      2).NiceFormat();
+			var cHeight = Math.Round(area.Height,     2).NiceFormat();
+			var xOffset = Math.Round(area.Left,       2).NiceFormat();
+			var yOffset = Math.Round(area.Top,        2).NiceFormat();
 			Console.WriteLine($"Your tablet is         {fWidth}cm wide and and {fHeight}cm high");
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
 			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)");

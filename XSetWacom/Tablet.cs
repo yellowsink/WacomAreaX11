@@ -20,7 +20,7 @@ namespace XSetWacom
 			set => TabletDriver.SetRotation(Id, value);
 		}
 
-		public TabletArea FullArea => TabletDriver.GetFullArea(Id);
+		public FullArea FullArea => TabletDriver.GetFullArea(Id);
 
 		// auto convert to ID if needed (passing to Wacom class methods etc)
 		public static implicit operator int(Tablet tab) => tab.Id;

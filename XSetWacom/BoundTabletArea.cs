@@ -56,6 +56,8 @@ namespace XSetWacom
 			}
 		}
 
+		internal override FullArea FullArea => TabletDriver.GetFullArea(TabletId);
+
 		public override Rotation Rotation
 		{
 			get => TabletDriver.GetRotation(TabletId);

@@ -6,21 +6,21 @@ namespace XSetWacom
 	public partial class TabletArea
 	{
 
-		internal virtual int RawBottom { get; set; }
-		internal virtual int RawLeft   { get; set; }
-		internal virtual int RawRight  { get; set; }
-		internal virtual int RawTop    { get; set; }
-
-		public virtual Rotation Rotation { get; set; }
+		internal virtual int      RawBottom { get; set; }
+		internal virtual int      RawLeft   { get; set; }
+		internal virtual int      RawRight  { get; set; }
+		internal virtual int      RawTop    { get; set; }
+		internal virtual FullArea FullArea  { get; }
+		public virtual   Rotation Rotation  { get; set; }
 
 		public decimal ScaleFactor = 1;
 
-		public TabletArea((int left, int top, int right, int bottom) area, Rotation rotation = Rotation.None) :
-			this(area.left, area.top, area.right, area.bottom, rotation)
+		public TabletArea((int left, int top, int right, int bottom) area, FullArea fullArea, Rotation rotation = Rotation.None) :
+			this(area.left, area.top, area.right, area.bottom, fullArea, rotation)
 		{
 		}
 
-		public TabletArea(int left, int top, int right, int bottom, Rotation rotation, bool centimetres = false)
+		public TabletArea(int left, int top, int right, int bottom, FullArea fullArea, Rotation rotation, bool centimetres = false)
 		{
 			if (centimetres) ScaleToCentimetres();
 
@@ -28,9 +28,11 @@ namespace XSetWacom
 			Top    = top;
 			Right  = right;
 			Bottom = bottom;
-
-			// ReSharper disable once VirtualMemberCallInConstructor
-			Rotation = rotation;
+			// ReSharper disable VirtualMemberCallInConstructor
+			FullArea = fullArea;
+			
+			Rotation  = rotation;
+			// ReSharper restore VirtualMemberCallInConstructor
 		}
 
 		/// <summary>
@@ -42,8 +44,6 @@ namespace XSetWacom
 		public decimal Height => Bottom - Top;
 
 		public (int left, int top, int right, int bottom) Unscaled => (RawLeft, RawTop, RawRight, RawBottom);
-
-		public void Scale(decimal scaleFactor) => ScaleFactor *= scaleFactor;
 
 		public void ScaleToCentimetres() => ScaleFactor = 0.001m;
 

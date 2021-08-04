@@ -11,9 +11,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawLeft,
-				Rotation.Cw   => RawBottom,
-				Rotation.Half => RawRight,
-				Rotation.Ccw  => RawTop,
+				Rotation.Cw   => RawTop,
+				Rotation.Half => FullArea.Width - RawRight,
+				Rotation.Ccw  => FullArea.Height - RawBottom,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -27,10 +27,10 @@ namespace XSetWacom
 						RawTop = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						RawRight = (int) (value / ScaleFactor);
+						RawRight = (int) (FullArea.Width - value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						RawBottom = (int) (value / ScaleFactor);
+						RawBottom = (int) (FullArea.Height - value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -43,9 +43,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawRight,
-				Rotation.Cw   => RawTop,
-				Rotation.Half => RawLeft,
-				Rotation.Ccw  => RawBottom,
+				Rotation.Cw   => RawBottom,
+				Rotation.Half => FullArea.Width - RawLeft,
+				Rotation.Ccw  => FullArea.Height - RawTop,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -59,10 +59,10 @@ namespace XSetWacom
 						RawBottom = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						RawLeft = (int) (value / ScaleFactor);
+						RawLeft = (int) (FullArea.Width - value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						RawTop = (int) (value / ScaleFactor);
+						RawTop = (int) (FullArea.Height - value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -75,9 +75,9 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawTop,
-				Rotation.Cw   => RawRight,
-				Rotation.Half => RawBottom,
-				Rotation.Ccw  => RawLeft,
+				Rotation.Cw   => FullArea.Width - RawRight,
+				Rotation.Half => FullArea.Height - RawTop,
+				Rotation.Ccw  => RawRight,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
 			set
@@ -88,10 +88,10 @@ namespace XSetWacom
 						RawTop = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						RawLeft = (int) (value / ScaleFactor);
+						RawRight = (int) (FullArea.Width - value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						RawBottom = (int) (value / ScaleFactor);
+						RawTop = (int) (FullArea.Height - value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
 						RawRight = (int) (value / ScaleFactor);
@@ -107,8 +107,8 @@ namespace XSetWacom
 			get => Rotation switch
 			{
 				Rotation.None => RawBottom,
-				Rotation.Cw   => RawLeft,
-				Rotation.Half => RawTop,
+				Rotation.Cw   => FullArea.Width - RawLeft,
+				Rotation.Half => FullArea.Height - RawTop,
 				Rotation.Ccw  => RawRight,
 				_             => throw new ArgumentOutOfRangeException()
 			} * ScaleFactor;
@@ -120,13 +120,13 @@ namespace XSetWacom
 						RawBottom = (int) (value / ScaleFactor);
 						break;
 					case Rotation.Cw:
-						RawRight = (int) (value / ScaleFactor);
+						RawLeft = (int) (FullArea.Width - value / ScaleFactor);
 						break;
 					case Rotation.Half:
-						RawTop = (int) (value / ScaleFactor);
+						RawTop = (int) (FullArea.Height - value / ScaleFactor);
 						break;
 					case Rotation.Ccw:
-						RawLeft = (int) (value / ScaleFactor);
+						RawRight = (int) (value / ScaleFactor);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

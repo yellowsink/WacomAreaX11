@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace XSetWacom
 {
@@ -22,7 +21,12 @@ namespace XSetWacom
 			return true;
 		}
 
-		public static TabletArea GetArea(int tabletId)
+		public static TabletArea GetArea(int tabletId) 
+			=> new(GetAreaRaw(tabletId),
+				   GetFullArea(tabletId),
+				   GetRotation(tabletId));
+
+		private static (int, int, int, int) GetAreaRaw(int tabletId)
 		{
 			var areaProcess = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} Area")
 			{
@@ -32,16 +36,16 @@ namespace XSetWacom
 			var area    = areaProcess.StandardOutput.ReadToEnd().Trim().Split();
 			var intArea = area.Select(str => int.Parse(str)).ToArray();
 
-			return new TabletArea((intArea[0], intArea[1], intArea[2], intArea[3]), GetRotation(tabletId));
+			return (intArea[0], intArea[1], intArea[2], intArea[3]);
 		}
 
-		public static TabletArea GetFullArea(int tabletId)
+		public static FullArea GetFullArea(int tabletId)
 		{
-			var currentArea = GetArea(tabletId);
+			var currentArea = GetAreaRaw(tabletId);
 			ResetArea(tabletId);
-			var fullArea = GetArea(tabletId);
-			SetArea(tabletId, currentArea);
-			return fullArea;
+			var fullArea = GetAreaRaw(tabletId);
+			SetAreaRaw(tabletId, currentArea);
+			return new FullArea(fullArea);
 		}
 
 		public static Rotation GetRotation(int tabletId)
@@ -79,9 +83,11 @@ namespace XSetWacom
 			}) !.WaitForExit();
 		}
 
-		public static void SetArea(int tabletId, TabletArea area)
+		public static void SetArea(int tabletId, TabletArea area) => SetAreaRaw(tabletId, area.Unscaled);
+		
+		private static void SetAreaRaw(int tabletId, (int, int, int, int) area)
 			=> Process.Start(new ProcessStartInfo("xsetwacom",
-												  $"set {tabletId} Area {area.Unscaled.left} {area.Unscaled.top} {area.Unscaled.right} {area.Unscaled.bottom}")
+												  $"set {tabletId} Area {area.Item1} {area.Item2} {area.Item3} {area.Item4}")
 			{
 				RedirectStandardOutput = true
 			}) !.WaitForExit();
