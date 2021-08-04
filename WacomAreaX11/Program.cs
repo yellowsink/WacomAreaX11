@@ -45,8 +45,30 @@ By Cain Atkinson
 													   new[] { Rotation.None, Rotation.Cw, Rotation.Half, Rotation.Ccw },
 													   area.Rotation);
 
-			var newWidth  = InputHelper.EnterNumber("Please enter the desired new tablet area width");
-			var newHeight = InputHelper.EnterNumber("Please enter the desired new tablet area height");
+			var aspectRatio = InputHelper.PickFromList("Do you want to snap to a ratio?",
+													   new[] { AspectRatio.Free, AspectRatio.Square, AspectRatio.WidescreenWidth, AspectRatio.WideScreenHeight },
+													   new[] { "No", "Square", "16:9 - set width", "16:9 - set height" });
+			decimal newWidth, newHeight;
+			switch (aspectRatio)
+			{
+				case AspectRatio.Free:
+					newWidth  = InputHelper.EnterNumber("Please enter the desired new tablet area width");
+					newHeight = InputHelper.EnterNumber("Please enter the desired new tablet area height");
+					break;
+				case AspectRatio.Square:
+					newHeight = newWidth = InputHelper.EnterNumber("Please enter the desired new tablet area width");
+					break;
+				case AspectRatio.WidescreenWidth:
+					newWidth  = InputHelper.EnterNumber("Please enter the desired new tablet area width");
+					newHeight = newWidth * 9 / 16;
+					break;
+				case AspectRatio.WideScreenHeight:
+					newHeight  = InputHelper.EnterNumber("Please enter the desired new tablet area height");
+					newWidth = newHeight * 16 / 9;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 
 			var centerX = InputHelper.YesNo("Do you want to center your area horizontally?", true);
 			var centerY = InputHelper.YesNo("Do you want to center your area vertically?",   true);
@@ -98,5 +120,10 @@ By Cain Atkinson
 
 			return (fullAreaRotated.Width / 2 - area.Width / 2, fullAreaRotated.Height / 2 - area.Height / 2);
 		}
+	}
+
+	internal enum AspectRatio
+	{
+		Free, Square, WidescreenWidth, WideScreenHeight
 	}
 }

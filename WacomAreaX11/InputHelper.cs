@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace WacomAreaX11
 {
@@ -25,7 +26,7 @@ namespace WacomAreaX11
 		public static bool YesNo(string message, bool defaultSelection)
 			=> PickFromList(message, new[] { "No", "Yes" }, defaultSelection ? 1 : 0) == "Yes";
 
-		public static T PickFromList<T>(string message, T[] options, int defaultSelection = 0)
+		public static T PickFromList<T>(string message, T[] options, string[] display, int defaultSelection = 0)
 		{
 			var selected = defaultSelection;
 
@@ -36,8 +37,8 @@ namespace WacomAreaX11
 				{
 					// if selected draw some "arrows" around it
 					Console.Write(i == selected
-									  ? $">>> {options[i]} <<<"
-									  : options[i]);
+									  ? $">>> {display[i]} <<<"
+									  : display[i]);
 
 					// If not last item in options write a separator
 					if (i != options.Length - 1) Console.Write(" | ");
@@ -65,6 +66,9 @@ namespace WacomAreaX11
 				}
 			}
 		}
+		
+		public static T PickFromList<T>(string message, T[] options, int defaultSelection = 0)
+			=> PickFromList(message, options, options.Select(item => item.ToString()).ToArray(), defaultSelection);
 
 		public static T PickFromList<T>(string message, T[] options, T defaultSelection)
 		{
