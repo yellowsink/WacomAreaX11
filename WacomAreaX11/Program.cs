@@ -76,12 +76,15 @@ By Cain Atkinson
 
 		private static void PrintTabletInfo(TabletArea area, FullArea fullArea)
 		{
-			var fWidth  = Math.Round(fullArea.Width,  2).NiceFormat();
-			var fHeight = Math.Round(fullArea.Height, 2).NiceFormat();
-			var cWidth  = Math.Round(area.Width,      2).NiceFormat();
-			var cHeight = Math.Round(area.Height,     2).NiceFormat();
-			var xOffset = Math.Round(area.Left,       2).NiceFormat();
-			var yOffset = Math.Round(area.Top,        2).NiceFormat();
+			var rFullArea = fullArea.ToTabletArea(area.Rotation);
+			rFullArea.ScaleToCentimetres();
+			
+			var fWidth  = Math.Round(rFullArea.Width,  2).NiceFormat();
+			var fHeight = Math.Round(rFullArea.Height, 2).NiceFormat();
+			var cWidth  = Math.Round(area.Width,       2).NiceFormat();
+			var cHeight = Math.Round(area.Height,      2).NiceFormat();
+			var xOffset = Math.Round(area.Left,        2).NiceFormat();
+			var yOffset = Math.Round(area.Top,         2).NiceFormat();
 			Console.WriteLine($"Your tablet is         {fWidth}cm wide and and {fHeight}cm high");
 			Console.WriteLine($"Your current area is   {cWidth}cm wide and     {cHeight}cm high");
 			Console.WriteLine($"Your current offset is {xOffset}cm (from left)  {yOffset}cm (from top)");
@@ -90,7 +93,7 @@ By Cain Atkinson
 
 		private static (decimal x, decimal y) GetCenteredOffset(TabletArea area, FullArea fullArea)
 		{
-			var fullAreaRotated = new TabletArea(fullArea.Unscaled, fullArea, area.Rotation);
+			var fullAreaRotated = fullArea.ToTabletArea(area.Rotation);
 			fullAreaRotated.ScaleToCentimetres();
 
 			return (fullAreaRotated.Width / 2 - area.Width / 2, fullAreaRotated.Height / 2 - area.Height / 2);

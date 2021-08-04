@@ -37,5 +37,7 @@ namespace XSetWacom
 		internal int RawHeight => _rawBottom - _rawTop;
 
 		public (int, int, int, int) Unscaled => (_rawLeft, _rawTop, _rawRight, _rawBottom);
+		
+		public TabletArea ToTabletArea(Rotation rotation) => new(Unscaled, this, rotation);
 	}
 }
