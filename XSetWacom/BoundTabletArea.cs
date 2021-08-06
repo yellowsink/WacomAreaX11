@@ -63,5 +63,11 @@ namespace XSetWacom
 			get => TabletDriver.GetRotation(TabletId);
 			set => TabletDriver.SetRotation(TabletId, value);
 		}
+		
+		public int Smoothing
+		{
+			get => TabletDriver.GetSmoothing(TabletId);
+			set => TabletDriver.SetSmoothing(TabletId, value);
+		}
 	}
 }

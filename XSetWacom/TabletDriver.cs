@@ -66,6 +66,17 @@ namespace XSetWacom
 			};
 		}
 
+		public static int GetSmoothing(int tabletId)
+		{
+			var process = Process.Start(new ProcessStartInfo("xsetwacom", $"get {tabletId} RawSample")
+			{
+				RedirectStandardOutput = true
+			});
+			process!.WaitForExit();
+			
+			return int.Parse(process.StandardOutput.ReadToEnd());
+		}
+
 		public static void SetRotation(int tabletId, Rotation rotation)
 		{
 			var rotationStr = rotation switch
@@ -97,6 +108,16 @@ namespace XSetWacom
 			{
 				RedirectStandardOutput = true
 			}) !.WaitForExit();
+
+		public static void SetSmoothing(int tabletId, int smoothing)
+		{
+			if (smoothing < 1 || smoothing > 20)
+				throw new ArgumentOutOfRangeException(nameof(smoothing));
+			Process.Start(new ProcessStartInfo("xsetwacom", $"set {tabletId} RawSample {smoothing}")
+			{
+				RedirectStandardOutput = true
+			}) !.WaitForExit();
+		}
 
 		public static int GetTabletId()
 		{

@@ -14,12 +14,6 @@ namespace XSetWacom
 
 		public BoundTabletArea BoundArea => new(Id);
 
-		public Rotation Rotation
-		{
-			get => TabletDriver.GetRotation(Id);
-			set => TabletDriver.SetRotation(Id, value);
-		}
-
 		public FullArea FullArea => TabletDriver.GetFullArea(Id);
 
 		// auto convert to ID if needed (passing to Wacom class methods etc)
