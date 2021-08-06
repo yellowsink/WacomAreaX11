@@ -23,13 +23,13 @@ By Cain Atkinson
 														  new[]
 														  {
 															  MenuChoices.Area, MenuChoices.Rotation,
-															  MenuChoices.Smoothing, MenuChoices.Save, MenuChoices.Load,
-															  MenuChoices.Quit
+															  MenuChoices.Smoothing, MenuChoices.ResetArea,
+															  MenuChoices.Save, MenuChoices.Load, MenuChoices.Quit
 														  },
 														  new[]
 														  {
 															  "Set area", "Change rotation", "Set smoothing",
-															  "Save config", "Load config", "Exit app"
+															  "Reset area", "Save config", "Load config", "Exit app"
 														  },
 														  lastChoice);
 
@@ -43,6 +43,9 @@ By Cain Atkinson
 						break;
 					case MenuChoices.Smoothing:
 						EnterSmoothing(tablet);
+						break;
+					case MenuChoices.ResetArea:
+						tablet.ResetArea();
 						break;
 					case MenuChoices.Save:
 						Save(tablet);
@@ -88,6 +91,7 @@ Your current input smoothing setting is: {smoothing} samples";
 		Area,
 		Rotation,
 		Smoothing,
+		ResetArea,
 		Save,
 		Load,
 		Quit

@@ -18,6 +18,8 @@ namespace XSetWacom
 
 		public FullArea FullArea => TabletDriver.GetFullArea(Id);
 
+		public void ResetArea() => TabletDriver.ResetArea(Id);
+
 		// auto convert to ID if needed (passing to Wacom class methods etc)
 		public static implicit operator int(Tablet tab) => tab.Id;
 		public static explicit operator Tablet(int id)  => new(id);

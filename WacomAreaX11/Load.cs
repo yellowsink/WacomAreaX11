@@ -10,22 +10,18 @@ namespace WacomAreaX11
 	{
 		private static void Load()
 		{
-			var configs = new DirectoryInfo(ConfigSavePath).GetFiles()
-														   .Where(f => f.Extension == ".sh")
-														   .Select(f => (f.Name[Range.EndAt(f.Name.Length - 3)],
-																		 f.FullName))
-														   .ToArray();
+			var filesInConfigDir = new DirectoryInfo(ConfigSavePath).GetFiles();
+			
+			var configs = (from file in filesInConfigDir
+						   where file.Extension == ".sh"
+						   select (file.Name[Range.EndAt(file.Name.Length - 3)], file.FullName))
+			   .ToArray();
 
-			var (choice, choicePath) = ListPicker.Menu("Pick a config to load",
-				configs,
-				configs.Select(c => c.Item1).ToArray());
+			var choicePath = ListPicker.Menu("Pick a config to load",
+											 configs.Select(c => c.FullName).ToArray(),
+											 configs.Select(c => c.Item1).ToArray());
 
 			Process.Start("sh", choicePath)!.WaitForExit();
-			
-			var con = CountingConsole.WriteLineNew($@"Loaded config {choice} successfully.
-Press a key to go back to the main menu.");
-			con.ReadKey();
-			con.ClearAllLinesWritten();
 		}
 	}
 }
