@@ -111,7 +111,7 @@ namespace XSetWacom
 
 		public static void SetSmoothing(int tabletId, int smoothing)
 		{
-			if (smoothing < 1 || smoothing > 20)
+			if (smoothing is < 1 or > 20)
 				throw new ArgumentOutOfRangeException(nameof(smoothing));
 			Process.Start(new ProcessStartInfo("xsetwacom", $"set {tabletId} RawSample {smoothing}")
 			{
@@ -138,6 +138,22 @@ namespace XSetWacom
 			var id = Regex.Replace(tablet, ".*id: (\\d+).*", "$1");
 
 			return int.Parse(id);
+		}
+
+		public static string GetTabletName(int tabletId)
+		{
+			var process = Process.Start(new ProcessStartInfo("xsetwacom", "list")
+			{
+				RedirectStandardOutput = true
+			});
+			process!.WaitForExit();
+			var tablets = process.StandardOutput.ReadToEnd().Split('\n');
+			
+			var tablet = tablets.FirstOrDefault(s => s.Contains($"id: {tabletId}"));
+			if (tablet == null)
+				throw new ArgumentOutOfRangeException(nameof(tabletId));
+
+			return Regex.Replace(tablet, "(.*?)\\s{2,}.*", "$1");
 		}
 
 		public static Tablet GetTablet() => (Tablet) GetTabletId();

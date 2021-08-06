@@ -6,6 +6,8 @@ namespace XSetWacom
 
 		public int Id { get; }
 
+		public string Name => TabletDriver.GetTabletName(Id);
+		
 		public TabletArea Area
 		{
 			get => TabletDriver.GetArea(Id);

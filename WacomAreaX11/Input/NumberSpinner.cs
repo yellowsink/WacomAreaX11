@@ -4,13 +4,15 @@ namespace WacomAreaX11.Input
 {
 	public static class NumberSpinner
 	{
-		public static decimal Spin(string message, bool decimalPlaces = false, decimal min = 0, decimal max = 10, decimal start = 0)
+		public static decimal Spin(string message, bool cleanup, bool decimalPlaces = false, decimal min = 0, decimal max = 10, decimal start = 0)
 		{
+			var con   = new CountingConsole();
+			
 			var selection = start;
 			while (true)
 			{
-				Console.Write($"{Tools.ClearLineAndToStart}{message}    {selection}");
-				var key = Console.ReadKey().Key;
+				con.Write($"{Tools.ClearLineAndToStart}{message}    {selection}");
+				var key = con.ReadKey().Key;
 				// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
 				switch (key)
 				{
@@ -30,7 +32,8 @@ namespace WacomAreaX11.Input
 						break;
 					
 					case ConsoleKey.Enter:
-						Console.WriteLine();
+						con.WriteLine();
+						if (cleanup) con.ClearAllLinesWritten();
 						return selection;
 				}
 			}
@@ -60,7 +63,7 @@ namespace WacomAreaX11.Input
 			}
 		}
 
-		public static int Spin(string message, int min = 0, int max = 10, int start = 0)
-			=> (int) Spin(message, false, min, max, start);
+		public static int Spin(string message, bool cleanup, int min = 0, int max = 10, int start = 0)
+			=> (int) Spin(message, cleanup, false, min, max, start);
 	}
 }
