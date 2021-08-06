@@ -48,6 +48,7 @@ By Cain Atkinson
 						Save(tablet);
 						break;
 					case MenuChoices.Load:
+						Load();
 						break;
 					case MenuChoices.Quit:
 						return;
