@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WacomAreaX11", "WacomAreaX1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSetWacom", "XSetWacom\XSetWacom.csproj", "{8F75000F-B853-438A-809C-902F6EAAC242}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WacomAreaX11.Gui", "WacomAreaX11.Gui\WacomAreaX11.Gui.csproj", "{4927A102-BC07-4713-A401-CD0F848410F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{8F75000F-B853-438A-809C-902F6EAAC242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F75000F-B853-438A-809C-902F6EAAC242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F75000F-B853-438A-809C-902F6EAAC242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4927A102-BC07-4713-A401-CD0F848410F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4927A102-BC07-4713-A401-CD0F848410F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4927A102-BC07-4713-A401-CD0F848410F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4927A102-BC07-4713-A401-CD0F848410F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
