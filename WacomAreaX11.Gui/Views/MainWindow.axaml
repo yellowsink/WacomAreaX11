@@ -6,15 +6,22 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="WacomAreaX11.Gui.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="WacomAreaX11.Gui">
+        Title="WacomAreaX11">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TabControl>
+    <TabControl SelectionChanged="TabSelectedChanged">
 	    
-	    <TabItem Header="Tablet">
+	    <TabItem Header="Tablets" Name="TabItemTablets">
+		    <!-- This scrollviewer really is unnecessary but just in case -->
+		    <ScrollViewer>
+			    <ListBox Items="{Binding TabletsBindable^}" SelectedItem="{Binding Tablet, Mode=OneWayToSource}"/>
+		    </ScrollViewer>
+	    </TabItem>
+	    
+	    <TabItem Header="Area" Name="TabItemArea">
 		    <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="*, Auto, Auto, Auto">
 			    
 			    <Canvas Width="300" Height="200" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
@@ -50,7 +57,7 @@
 		    </Grid>
 	    </TabItem>
 	    
-	    <TabItem Header="Configs">
+	    <TabItem Header="Configs" Name="TabItemConfigs">
 		    
 	    </TabItem>
 	    

@@ -1,7 +1,11 @@
+using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using DynamicData;
+using JetBrains.Annotations;
 using WacomAreaX11.Gui.ViewModels;
 using XSetWacom;
 
@@ -9,26 +13,21 @@ namespace WacomAreaX11.Gui.Views
 {
 	public class MainWindow : Window
 	{
-		private readonly Tablet _tablet;
-		
 		public MainWindow()
 		{
 			DataContext = new MainWindowViewModel();
-			
-			InitializeComponent();
+
+			AvaloniaXamlLoader.Load(this);
 #if DEBUG
 			this.AttachDevTools();
 #endif
-
-			_tablet = TabletDriver.GetTablet();
-			
-			ResetToCurrent(null, null!);
 		}
 
-		private void InitializeComponent() { AvaloniaXamlLoader.Load(this); }
-
-		private void ApplyConfig(object? sender, RoutedEventArgs routedEventArgs)
+		[UsedImplicitly]
+		private void ApplyConfig(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
+			if (((MainWindowViewModel) DataContext!).Tablet == null) return;
+
 			var width     = ((MainWindowViewModel) DataContext!).Width;
 			var height    = ((MainWindowViewModel) DataContext!).Height;
 			var left      = ((MainWindowViewModel) DataContext!).OffsetX;
@@ -37,7 +36,7 @@ namespace WacomAreaX11.Gui.Views
 			var smoothing = ((MainWindowViewModel) DataContext!).Smoothing;
 
 			// ignore the 0,0,0,0 and shit i just wrote the constructors in a weird way and cba to fix it
-			var area = new TabletArea(0, 0, 0, 0, _tablet.FullArea, rotation, false)
+			var area = new TabletArea(0, 0, 0, 0, ((MainWindowViewModel) DataContext!).Tablet!.FullArea, rotation)
 			{
 				ScaleFactor = 0.01m,
 				Left   = left,
@@ -46,13 +45,16 @@ namespace WacomAreaX11.Gui.Views
 				Bottom = top  + height
 			};
 			
-			_tablet.Area                = area;
-			_tablet.BoundArea.Smoothing = smoothing;
+			((MainWindowViewModel) DataContext!).Tablet!.Area                = area;
+			((MainWindowViewModel) DataContext!).Tablet!.BoundArea.Smoothing = smoothing;
 		}
 		
-		private void ResetToCurrent(object? sender, RoutedEventArgs routedEventArgs)
+		[UsedImplicitly]
+		private void ResetToCurrent(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
-			var area = _tablet.Area;
+			if (((MainWindowViewModel) DataContext!).Tablet == null) return;
+			
+			var area = ((MainWindowViewModel) DataContext!).Tablet!.Area;
 			area.ScaleFactor = 0.01m;
 			
 			((MainWindowViewModel) DataContext!).Width     = area.Width;
@@ -60,13 +62,40 @@ namespace WacomAreaX11.Gui.Views
 			((MainWindowViewModel) DataContext!).OffsetX   = area.Left;
 			((MainWindowViewModel) DataContext!).OffsetY   = area.Top;
 			((MainWindowViewModel) DataContext!).Rotation  = area.Rotation;
-			((MainWindowViewModel) DataContext!).Smoothing = _tablet.BoundArea.Smoothing;
+			((MainWindowViewModel) DataContext!).Smoothing = ((MainWindowViewModel) DataContext!).Tablet!.BoundArea.Smoothing;
 		}
 		
-		private void ResetToDefault(object? sender, RoutedEventArgs routedEventArgs)
+		[UsedImplicitly]
+		private void ResetToDefault(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
-			_tablet.ResetArea();
-			ResetToCurrent(null, null!);
+			((MainWindowViewModel) DataContext!).Tablet?.ResetArea();
+			ResetToCurrent();
+		}
+
+		[UsedImplicitly]
+		private void TabSelectedChanged(object? sender, SelectionChangedEventArgs e)
+		{
+			switch (((TabControl) sender!).SelectedIndex)
+			{
+				case 0:
+					try
+					{
+						((MainWindowViewModel) DataContext!).Tablets.Clear();
+						((MainWindowViewModel) DataContext!).Tablets.AddRange(TabletDriver.GetTablets());
+						((MainWindowViewModel) DataContext!).Tablet
+							??= ((MainWindowViewModel) DataContext!).Tablets.Items.First();
+					}
+					catch (Exception)
+					{
+						// Oh no! Anyway...
+					}
+					break;
+				case 1:
+					ResetToCurrent();
+					break;
+				case 2:
+					break;
+			}
 		}
 	}
 }

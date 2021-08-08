@@ -119,25 +119,28 @@ namespace XSetWacom
 			}) !.WaitForExit();
 		}
 
-		public static int GetTabletId()
+		public static int GetTabletId() => GetTabletIds().First();
+		
+		public static int[] GetTabletIds()
 		{
 			var process = Process.Start(new ProcessStartInfo("xsetwacom", "list")
 			{
 				RedirectStandardOutput = true
 			});
 			process!.WaitForExit();
-			var tablets = process.StandardOutput.ReadToEnd().Split('\n');
+			var rawOut = process.StandardOutput.ReadToEnd().Split('\n');
 
-			var tablet = tablets.FirstOrDefault(s => s.Contains("type: STYLUS"));
-			if (tablet == null)
+			var tablets = rawOut.Where(s => s.Contains("type: STYLUS"))
+								.Select(t => int.Parse(Regex.Replace(t, ".*id: (\\d+).*", "$1")))
+								.ToArray();
+			
+			if (tablets.Length == 0)
 			{
 				Console.WriteLine("Could not find a tablet. Is one connected?");
 				Environment.Exit(0);
 			}
 
-			var id = Regex.Replace(tablet, ".*id: (\\d+).*", "$1");
-
-			return int.Parse(id);
+			return tablets;
 		}
 
 		public static string GetTabletName(int tabletId)
@@ -157,5 +160,7 @@ namespace XSetWacom
 		}
 
 		public static Tablet GetTablet() => (Tablet) GetTabletId();
+
+		public static Tablet[] GetTablets() => GetTabletIds().Select(id => (Tablet) id).ToArray();
 	}
 }

@@ -23,5 +23,7 @@ namespace XSetWacom
 		// auto convert to ID if needed (passing to Wacom class methods etc)
 		public static implicit operator int(Tablet tab) => tab.Id;
 		public static explicit operator Tablet(int id)  => new(id);
+
+		public override string ToString() => $"{Name} (Device #{Id})";
 	}
 }

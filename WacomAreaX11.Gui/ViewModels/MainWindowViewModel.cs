@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using Avalonia.Controls;
+using DynamicData;
 using ReactiveUI;
 using XSetWacom;
 
@@ -12,6 +15,11 @@ namespace WacomAreaX11.Gui.ViewModels
 		private decimal  _offsetX;
 		private decimal  _offsetY;
 		private Rotation _rotation;
+
+		// Needs to be a prop for avalonia binding
+		public Tablet? Tablet { get; set; } = null;
+
+		private SourceList<Tablet> _tablets = new();
 
 		public ComboBoxItem[] RotationItems => new[]
 		{
@@ -56,5 +64,13 @@ namespace WacomAreaX11.Gui.ViewModels
 			get => _rotation;
 			set => this.RaiseAndSetIfChanged(ref _rotation, value);
 		}
+
+		public SourceList<Tablet> Tablets
+		{
+			get => _tablets;
+			set => this.RaiseAndSetIfChanged(ref _tablets, value);
+		}
+
+		public IObservable<IReadOnlyCollection<Tablet>> TabletsBindable => Tablets.Connect().ToCollection();
 	}
 }
