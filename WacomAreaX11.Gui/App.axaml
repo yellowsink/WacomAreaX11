@@ -7,9 +7,13 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme Mode="Dark"/>
         
         <Style Selector="NumericUpDown">
+	        <Setter Property="Margin" Value="5" />
+        </Style>
+        
+        <Style Selector="TextBox">
 	        <Setter Property="Margin" Value="5" />
         </Style>
         

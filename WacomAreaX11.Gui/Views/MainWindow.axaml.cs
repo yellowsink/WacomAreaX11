@@ -2,10 +2,12 @@ using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData;
 using JetBrains.Annotations;
+using ReactiveUI;
 using WacomAreaX11.Gui.ViewModels;
 using XSetWacom;
 
@@ -94,6 +96,8 @@ namespace WacomAreaX11.Gui.Views
 					ResetToCurrent();
 					break;
 				case 2:
+					ConfigNameChanged();
+					((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.Configs));
 					break;
 			}
 		}
@@ -101,5 +105,18 @@ namespace WacomAreaX11.Gui.Views
 		[UsedImplicitly]
 		private void ApplySelectedConfig(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 			=> ((MainWindowViewModel) DataContext!).Config?.Apply();
+
+		private void ConfigNameChanged(object? sender = null, KeyEventArgs keyEventArgs = null!)
+			=> ((MainWindowViewModel) DataContext!).ConfigSaveButtonActive
+			   = !string.IsNullOrWhiteSpace(((MainWindowViewModel) DataContext!).ConfigSaveName)
+			  && ((MainWindowViewModel) DataContext!).Tablet != null;
+
+		[UsedImplicitly]
+		private void SaveCurrentToConfig(object? sender = null, RoutedEventArgs e = null!)
+		{
+			Config.Save(((MainWindowViewModel) DataContext!).ConfigSaveName,
+						((MainWindowViewModel) DataContext!).Tablet!);
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.Configs));
+		}
 	}
 }

@@ -58,12 +58,16 @@
 	    </TabItem>
 	    
 	    <TabItem Header="Configs" Name="TabItemConfigs">
-		    <Grid RowDefinitions="*, Auto">
-			    <ScrollViewer>
+		    <Grid RowDefinitions="*, Auto" ColumnDefinitions="*, *, *">
+			    <ScrollViewer Grid.ColumnSpan="3">
 				    <ListBox Items="{Binding Configs}" SelectedItem="{Binding Config, Mode=OneWayToSource}"/>
 			    </ScrollViewer>
 			    
-			    <Button Grid.Row="1" Click="ApplySelectedConfig">Apply Selected Config</Button>
+			    <Button Grid.Row="1" Grid.Column="0" Click="ApplySelectedConfig">Apply selected config</Button>
+			    <TextBox Grid.Row="1" Grid.Column="1" Watermark="Config name" Name="TextBoxConfigName"
+			             Text="{Binding ConfigSaveName, Mode=TwoWay}" KeyUp="ConfigNameChanged" />
+			    <Button Grid.Row="1" Grid.Column="2" Click="SaveCurrentToConfig"
+			            IsEnabled="{Binding ConfigSaveButtonActive, Mode=OneWay}">Save current to config</Button>
 		    </Grid>
 	    </TabItem>
 	    

@@ -9,14 +9,14 @@ namespace WacomAreaX11.Gui.ViewModels
 {
 	public class MainWindowViewModel : ViewModelBase
 	{
-		private decimal  _width;
-		private decimal  _height;
-		private int      _smoothing;
-		private decimal  _offsetX;
-		private decimal  _offsetY;
-		private Rotation _rotation;
-
+		private decimal            _width;
+		private decimal            _height;
+		private int                _smoothing;
+		private decimal            _offsetX;
+		private decimal            _offsetY;
+		private Rotation           _rotation;
 		private SourceList<Tablet> _tablets = new();
+		private bool               _configSaveButtonActive;
 
 		public ComboBoxItem[] RotationItems => new[]
 		{
@@ -69,12 +69,20 @@ namespace WacomAreaX11.Gui.ViewModels
 		}
 
 		public IObservable<IReadOnlyCollection<Tablet>> TabletsBindable => Tablets.Connect().ToCollection();
-		
+
 		// Needs to be a prop for avalonia binding
 		public Tablet? Tablet { get; set; }
 
 		public Config[] Configs => Config.GetAll();
 		
 		public Config? Config { get; set; }
+
+		public bool ConfigSaveButtonActive
+		{
+			get => _configSaveButtonActive;
+			set => this.RaiseAndSetIfChanged(ref _configSaveButtonActive, value);
+		}
+		
+		public string ConfigSaveName { get; set; } = string.Empty;
 	}
 }
