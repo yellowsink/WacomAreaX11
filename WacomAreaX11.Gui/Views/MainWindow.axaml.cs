@@ -80,17 +80,7 @@ namespace WacomAreaX11.Gui.Views
 			switch (((TabControl) sender!).SelectedIndex)
 			{
 				case 0:
-					try
-					{
-						((MainWindowViewModel) DataContext!).Tablets.Clear();
-						((MainWindowViewModel) DataContext!).Tablets.AddRange(TabletDriver.GetTablets());
-						((MainWindowViewModel) DataContext!).Tablet
-							??= ((MainWindowViewModel) DataContext!).Tablets.Items.First();
-					}
-					catch (Exception)
-					{
-						// Oh no! Anyway...
-					}
+					((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.Tablets));
 					break;
 				case 1:
 					ResetToCurrent();
@@ -106,6 +96,7 @@ namespace WacomAreaX11.Gui.Views
 		private void ApplySelectedConfig(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 			=> ((MainWindowViewModel) DataContext!).Config?.Apply();
 
+		[UsedImplicitly]
 		private void ConfigNameChanged(object? sender = null, KeyEventArgs keyEventArgs = null!)
 			=> ((MainWindowViewModel) DataContext!).ConfigSaveButtonActive
 			   = !string.IsNullOrWhiteSpace(((MainWindowViewModel) DataContext!).ConfigSaveName)
@@ -135,5 +126,16 @@ namespace WacomAreaX11.Gui.Views
 			((MainWindowViewModel) DataContext!).OffsetX = offsetX;
 			((MainWindowViewModel) DataContext!).OffsetY = offsetY;
 		}
+
+/*
+		private void ForceUpdateAreaDisplay()
+		{
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.AreaDisplayCanvasWidth));
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.AreaDisplayWidth));
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.AreaDisplayHeight));
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.AreaDisplayOffsetX));
+			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.AreaDisplayOffsetY));
+		}
+*/
 	}
 }
