@@ -97,5 +97,9 @@ namespace WacomAreaX11.Gui.Views
 					break;
 			}
 		}
+
+		[UsedImplicitly]
+		private void ApplySelectedConfig(object? sender = null, RoutedEventArgs routedEventArgs = null!)
+			=> ((MainWindowViewModel) DataContext!).Config?.Apply();
 	}
 }

@@ -16,9 +16,6 @@ namespace WacomAreaX11.Gui.ViewModels
 		private decimal  _offsetY;
 		private Rotation _rotation;
 
-		// Needs to be a prop for avalonia binding
-		public Tablet? Tablet { get; set; } = null;
-
 		private SourceList<Tablet> _tablets = new();
 
 		public ComboBoxItem[] RotationItems => new[]
@@ -72,5 +69,12 @@ namespace WacomAreaX11.Gui.ViewModels
 		}
 
 		public IObservable<IReadOnlyCollection<Tablet>> TabletsBindable => Tablets.Connect().ToCollection();
+		
+		// Needs to be a prop for avalonia binding
+		public Tablet? Tablet { get; set; }
+
+		public Config[] Configs => Config.GetAll();
+		
+		public Config? Config { get; set; }
 	}
 }
