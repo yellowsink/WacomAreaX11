@@ -118,5 +118,22 @@ namespace WacomAreaX11.Gui.Views
 						((MainWindowViewModel) DataContext!).Tablet!);
 			((MainWindowViewModel) DataContext!).RaisePropertyChanged(nameof(MainWindowViewModel.Configs));
 		}
+
+		[UsedImplicitly]
+		private void CenterTabletArea(object? sender, RoutedEventArgs e)
+		{
+			var width           = ((MainWindowViewModel) DataContext!).Width;
+			var height          = ((MainWindowViewModel) DataContext!).Height;
+			var rotation        = ((MainWindowViewModel) DataContext!).Rotation;
+			
+			var fullAreaRotated = ((MainWindowViewModel) DataContext!).Tablet!.FullArea.ToTabletArea(rotation);
+			fullAreaRotated.ScaleFactor = 0.01m;
+
+			var offsetX = fullAreaRotated.Width  / 2 - width  / 2;
+			var offsetY = fullAreaRotated.Height / 2 - height / 2;
+
+			((MainWindowViewModel) DataContext!).OffsetX = offsetX;
+			((MainWindowViewModel) DataContext!).OffsetY = offsetY;
+		}
 	}
 }
